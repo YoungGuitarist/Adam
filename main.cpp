@@ -12,10 +12,15 @@
 using namespace std;
 
 // Params
+
+const int FRAME_DELAY_MS = 10;   // 10 мс задержки между кадрами
+const int TARGET_FPS = 100;      // 100 FPS (1000 мс / 10 мс)
+const int DAY_DURATION_SEC = 60; // 60 секунд в сутках
+const int TARGET_FRAMES_PER_DAY = DAY_DURATION_SEC * TARGET_FPS; // 6000 кадров
+
 int CURRENT_DAY = 0;
 int COUNT_OF_DAYS = 10;
 int HEIGHT = 30, WIDTH = 60;
-double DAY_DURATION = 60000;
 int MAX_UNITS = 10;
 char WORLD_ICON = '.';
 double GLOBAL_TIME = 0;
@@ -202,13 +207,13 @@ public:
   }
 
   void processUnit(Unit &unit) {
-    unit.hp = unit.hp - (FRAME_DELAY / DAY_DURATION) * 10;
+    unit.hp = unit.hp;
     char c = getCell(unit.x, unit.y);
     if (c == food.icon) {
-      unit.hp += 10 * (FRAME_DELAY / DAY_DURATION);
+      unit.hp += 10;
       clearCell(unit.x, unit.y);
     } else if (c == poison.icon) {
-      unit.hp -= 20 * (FRAME_DELAY / DAY_DURATION);
+      unit.hp -= 15;
       clearCell(unit.x, unit.y);
     }
 
@@ -254,8 +259,8 @@ public:
 
     drawUnits();
     render();
-    this_thread::sleep_for(chrono::milliseconds(FRAME_DELAY));
-    GLOBAL_TIME += FRAME_DELAY;
+    /*this_thread::sleep_for(chrono::milliseconds(FRAME_DELAY));
+    GLOBAL_TIME++;*/
   }
 };
 
@@ -267,12 +272,27 @@ int main() {
     world.clearAll();
     world.drawWorld();
 
-    while (GLOBAL_TIME < 1000) {
+    GLOBAL_TIME = 0; // Сброс времени дня
+    auto day_start = std::chrono::steady_clock::now();
+
+    while (GLOBAL_TIME < TARGET_FRAMES_PER_DAY) {
+      auto frame_start = std::chrono::steady_clock::now();
       world.action();
+      GLOBAL_TIME++;
+
+      auto frame_end = std::chrono::steady_clock::now();
+      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                         frame_end - frame_start)
+                         .count();
+      int remaining_delay = FRAME_DELAY_MS - static_cast<int>(elapsed);
+
+      // Корректировка задержки
+      if (remaining_delay > 0) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(remaining_delay));
+      }
     }
 
     CURRENT_DAY++;
-    // this_thread::sleep_for(chrono::seconds(DAY_DURATION));
   }
   return 0;
 }
