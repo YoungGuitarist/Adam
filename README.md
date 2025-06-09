@@ -18,7 +18,7 @@ This can be used as a basis for:
 
 ## 🔧 Installation and build
 
-> **Requirements:**  a
+> **Requirements:**  
 > - CMake (version 3.10+)  
 > - Compiler C++ (g++, clang, MSVC и др.)
 
@@ -26,3 +26,21 @@ This can be used as a basis for:
 ```bash
 git clone https://github.com/YoungGuitarist/Adam.git
 cd Adam
+```
+
+2. Make `build/` dir and go in it:
+```bash
+mkdir build/
+cd build/
+```
+
+3. Initialize Cmake and build it:
+```bash
+cmake ..
+make
+```
+
+4. Run project:
+```bash
+./Adam
+```
