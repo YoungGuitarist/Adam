@@ -1,7 +1,4 @@
-#include <algorithm>
 #include <chrono>
-#include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include <ostream>
 #include <random>
@@ -17,14 +14,16 @@ const int FRAME_DELAY_MS = 10;   // 10 мс задержки между кадр
 const int TARGET_FPS = 100;      // 100 FPS (1000 мс / 10 мс)
 const int DAY_DURATION_SEC = 60; // 60 секунд в сутках
 const int TARGET_FRAMES_PER_DAY = DAY_DURATION_SEC * TARGET_FPS; // 6000 кадров
+int TICK_PER_SECOND = TARGET_FPS;
 
+int COUNT_OF_DEAD_UNITS = 0;
+int REDUCE_DELAY = 0;
 int CURRENT_DAY = 0;
 int COUNT_OF_DAYS = 10;
 int HEIGHT = 30, WIDTH = 60;
 int MAX_UNITS = 10;
 char WORLD_ICON = '.';
-double GLOBAL_TIME = 0;
-int FRAME_DELAY = 10;
+int GLOBAL_TIME = 0;
 
 string GREEN = "\033[32m";
 string RED = "\033[31m";
@@ -117,6 +116,7 @@ public:
       isDead = true;
       icon = 'X';
       color = YELLOW;
+      COUNT_OF_DEAD_UNITS++;
     }
   };
 };
@@ -207,10 +207,15 @@ public:
   }
 
   void processUnit(Unit &unit) {
-    unit.hp = unit.hp;
+    if (REDUCE_DELAY == TICK_PER_SECOND - 1) {
+      unit.hp = unit.hp - 10;
+      REDUCE_DELAY = 0;
+    } else {
+      REDUCE_DELAY++;
+    }
     char c = getCell(unit.x, unit.y);
     if (c == food.icon) {
-      unit.hp += 10;
+      unit.hp += 12;
       clearCell(unit.x, unit.y);
     } else if (c == poison.icon) {
       unit.hp -= 15;
@@ -259,8 +264,6 @@ public:
 
     drawUnits();
     render();
-    /*this_thread::sleep_for(chrono::milliseconds(FRAME_DELAY));
-    GLOBAL_TIME++;*/
   }
 };
 
