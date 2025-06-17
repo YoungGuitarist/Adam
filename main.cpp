@@ -9,7 +9,6 @@
 using namespace std;
 
 // Params
-
 const int FRAME_DELAY_MS = 10;   // 10 мс задержки между кадрами
 const int TARGET_FPS = 100;      // 100 FPS (1000 мс / 10 мс)
 const int DAY_DURATION_SEC = 60; // 60 секунд в сутках
@@ -56,7 +55,7 @@ struct Poison {
 
 struct Genome {
   int speed;
-  double hp = 100;
+  double hp;
 };
 
 class Unit {
@@ -184,7 +183,7 @@ public:
     }
   }
 
-  Genome initializeGenome() { return {randFunc(0, 99)}; }
+  Genome initializeGenome() { return {randFunc(0, 99), 100}; };
 
   void initializeUnits() {
     units.clear();
