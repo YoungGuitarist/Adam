@@ -60,7 +60,7 @@ struct Genome {
 
 class Unit {
 public:
-  int x, y, lastX, lastY;
+  int x, y, lastX, lastY, id;
   string color = PURPLE;
   char icon = 'O';
   Genome genome;
@@ -68,8 +68,8 @@ public:
   bool isDead;
   int coolDown = genome.speed;
 
-  Unit(int x, int y, Genome genome)
-      : x(x), y(y), genome(genome), isDead(false) {};
+  Unit(int x, int y, Genome genome, int id)
+      : x(x), y(y), genome(genome), isDead(false), id(id) {};
 
   void move(int direction, int width, int height) {
     lastX = x;
@@ -115,7 +115,6 @@ public:
       isDead = true;
       icon = 'X';
       color = YELLOW;
-      COUNT_OF_DEAD_UNITS++;
     }
   };
 };
@@ -128,6 +127,7 @@ private:
   Poison poison;
   Food food;
   vector<Unit> units;
+  vector<Unit> deadUnits;
 
   void cleanBuffer() {
     cout << "\033[2J\033[H"; // Очистка экрана
@@ -189,7 +189,7 @@ public:
     units.clear();
     for (int i = 0; i < MAX_UNITS; i++) {
       units.push_back(Unit(randFunc(0, WIDTH - 1), randFunc(0, HEIGHT - 1),
-                           initializeGenome()));
+                           initializeGenome(), i));
     }
   }
 
@@ -200,8 +200,10 @@ public:
         setCell(units[i].x, units[i].y, units[i].icon, units[i].color);
       } else {
         setCell(units[i].lastX, units[i].lastY, WORLD_ICON);
-        setCell(units[i].x, units[i].y, units[i].icon, units[i].color);
       }
+    }
+    for (Unit unit : deadUnits) {
+      setCell(unit.x, unit.y, unit.icon, unit.color);
     }
   }
 
@@ -225,6 +227,13 @@ public:
       unit.isDead = true;
       unit.icon = 'X';
       unit.color = YELLOW;
+      deadUnits.push_back(unit);
+    }
+
+    for (int i = 0; i < units.size(); i++) {
+      if (units[i].isDead) {
+        units.erase(units.begin() + i);
+      }
     }
   }
 
