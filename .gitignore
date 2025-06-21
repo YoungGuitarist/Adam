@@ -5,7 +5,7 @@ build/
 ./programg
 
 
-# --- Сгенерированные файлы компиляции ---
+
 */build/
 */out/
 */bin/
@@ -13,6 +13,7 @@ build/
 *.exe
 *.out
 *.o
+*.txt
 *.a
 *.so
 *.dll
@@ -25,14 +26,14 @@ build/
 *.user
 *.aps
 
-# --- Кэш и временные файлы CMake ---
+
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 install_manifest.txt
 *.cmake
 
-# --- Среда разработки (Visual Studio) ---
+
 .vs/
 .vscode/
 *.suo
@@ -41,7 +42,7 @@ install_manifest.txt
 *.db
 *.VC.db
 
-# --- Дополнительно (если нужно) ---
+
 *.log
 *.tmp
 *.swp

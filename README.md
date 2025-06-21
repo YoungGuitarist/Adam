@@ -16,6 +16,29 @@ This can be used as a basis for:
 
 ---
 
+## Loging
+This project have loging function, that helping to check statisticks and genome of simulation
+
+Example:
+```txt
+Current day: 0
+Unit 0:
+   Day of death: 0
+   Current HP: -8
+   Genome: 
+      HP:42
+      SPEED: 64
+Unit 2:
+   Day of death: 0
+   Current HP: 0
+   Genome: 
+      HP:64
+      SPEED: 42
+------------------------------------------------------- 
+```
+
+---
+
 ## 🔧 Installation and build
 
 > **Requirements:**  

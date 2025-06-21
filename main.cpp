@@ -56,7 +56,7 @@ struct Poison {
 
 struct Genome {
   int speed;
-  double hp;
+  int hp;
 };
 
 class Unit {
@@ -128,13 +128,14 @@ private:
   Poison poison;
   Food food;
   vector<Unit> units;
-  vector<Unit> deadUnits;
+  
 
   void cleanBuffer() {
     cout << "\033[2J\033[H"; // Очистка экрана
   }
 
 public:
+   vector<Unit> deadUnits;
   World(int w, int h) : width(w), height(h) {
     grid = vector<vector<Cell>>(height, vector<Cell>(width));
   }
@@ -185,7 +186,7 @@ public:
     }
   }
 
-  Genome initializeGenome() { return {randFunc(0, 99), 10}; };
+  Genome initializeGenome() { return {randFunc(0, 99), randFunc(0, 99)}; };
 
   void initializeUnits() {
     units.clear();
@@ -276,19 +277,22 @@ public:
   }
 
   // Logging functions
-  void Logging() {
-      std::ofstream outFile("Log.txt");
+  void Logging(vector<Unit> MassiveForLogging) {
+      ofstream outFile("Log.txt", ios::app);
 
       if (outFile.is_open()) {
-          for (auto &unit : getUnits()) {
+          outFile << "Current day: " << CURRENT_DAY << "\n";
+          for (auto &unit : MassiveForLogging) {
               outFile << "Unit " << unit.id << ":" << "\n" << "   "
                   << "Day of death: " << CURRENT_DAY << "\n" << "   "
                   << "Current HP: " << unit.hp<< "\n" << "   " 
-                  << "Genome: " << "      " 
+                  << "Genome: " << "\n" << "      "
                   << "HP:" << unit.genome.hp << "\n" << "      "
                   << "SPEED: " << unit.genome.speed << "\n";
           };
+          outFile << "------------------------------------------------------- \n";
       }
+      outFile.close();
   }
 };
 
@@ -322,8 +326,12 @@ int main() {
       }
     }
 
+    //world.Logging(world.deadUnits);
 
     CURRENT_DAY++;
   }
+
+    world.clearAll();
+    cout << "\nSimulation ended, logs are ready!";
   return 0;
 }
