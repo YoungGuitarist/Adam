@@ -326,7 +326,7 @@ int main() {
       }
     }
 
-    //world.Logging(world.deadUnits);
+    world.Logging(world.deadUnits);
 
     CURRENT_DAY++;
   }
