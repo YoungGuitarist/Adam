@@ -5,13 +5,14 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
 // Params
 const int FRAME_DELAY_MS = 10;   // 10 мс задержки между кадрами
 const int TARGET_FPS = 100;      // 100 FPS (1000 мс / 10 мс)
-const int DAY_DURATION_SEC = 60; // 60 секунд в сутках
+const int DAY_DURATION_SEC = 10; // 60 секунд в сутках
 const int TARGET_FRAMES_PER_DAY = DAY_DURATION_SEC * TARGET_FPS; // 6000 кадров
 int TICK_PER_SECOND = TARGET_FPS;
 
@@ -20,7 +21,7 @@ int REDUCE_DELAY = 0;
 int CURRENT_DAY = 0;
 int COUNT_OF_DAYS = 10;
 int HEIGHT = 30, WIDTH = 60;
-int MAX_UNITS = 15; //измененор количество юнитов
+int MAX_UNITS = 3;
 char WORLD_ICON = '.';
 int GLOBAL_TIME = 0;
 
@@ -159,6 +160,7 @@ public:
         setCell(x, y, WORLD_ICON, "");
       }
     }
+    deadUnits.clear();
   }
 
   void drawWorld() {
@@ -183,7 +185,7 @@ public:
     }
   }
 
-  Genome initializeGenome() { return {randFunc(0, 99), 100}; };
+  Genome initializeGenome() { return {randFunc(0, 99), 10}; };
 
   void initializeUnits() {
     units.clear();
@@ -198,9 +200,7 @@ public:
       if (!units[i].isDead) {
         setCell(units[i].lastX, units[i].lastY, WORLD_ICON);
         setCell(units[i].x, units[i].y, units[i].icon, units[i].color);
-      } else {
-        setCell(units[i].lastX, units[i].lastY, WORLD_ICON);
-      }
+      } 
     }
     for (Unit unit : deadUnits) {
       setCell(unit.x, unit.y, unit.icon, unit.color);
@@ -231,9 +231,9 @@ public:
     }
 
     for (int i = 0; i < units.size(); i++) {
-      if (units[i].isDead) {
-        units.erase(units.begin() + i);
-      }
+        if (units[i].isDead) {
+            units.erase(units.begin() + i);
+        }
     }
   }
 
@@ -252,6 +252,7 @@ public:
       }
       buffer += '\n';
     }
+
   }
 
   void render() {
@@ -264,16 +265,34 @@ public:
   void action() {
 
     for (auto &unit : getUnits()) {
-      if (!unit.isDead) {
-        unit.move(randFunc(0, 7), WIDTH, HEIGHT);
-        processUnit(unit);
-      }
+        if (!unit.isDead) {
+            unit.move(randFunc(0, 7), WIDTH, HEIGHT);
+            processUnit(unit);
+        }
     }
 
     drawUnits();
     render();
   }
+
+  // Logging functions
+  void Logging() {
+      std::ofstream outFile("Log.txt");
+
+      if (outFile.is_open()) {
+          for (auto &unit : getUnits()) {
+              outFile << "Unit " << unit.id << ":" << "\n" << "   "
+                  << "Day of death: " << CURRENT_DAY << "\n" << "   "
+                  << "Current HP: " << unit.hp<< "\n" << "   " 
+                  << "Genome: " << "      " 
+                  << "HP:" << unit.genome.hp << "\n" << "      "
+                  << "SPEED: " << unit.genome.speed << "\n";
+          };
+      }
+  }
 };
+
+
 
 int main() {
   World world(WIDTH, HEIGHT);
@@ -302,6 +321,7 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(remaining_delay));
       }
     }
+
 
     CURRENT_DAY++;
   }
