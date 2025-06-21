@@ -20,7 +20,7 @@ int REDUCE_DELAY = 0;
 int CURRENT_DAY = 0;
 int COUNT_OF_DAYS = 10;
 int HEIGHT = 30, WIDTH = 60;
-int MAX_UNITS = 10;
+int MAX_UNITS = 15; //измененор количество юнитов
 char WORLD_ICON = '.';
 int GLOBAL_TIME = 0;
 

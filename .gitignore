@@ -3,3 +3,46 @@ build/
 .gitignore
 ./programg
 ./programg
+
+
+# --- Сгенерированные файлы компиляции ---
+*/build/
+*/out/
+*/bin/
+*/obj/
+*.exe
+*.out
+*.o
+*.a
+*.so
+*.dll
+*.lib
+*.pdb
+*.ilk
+*.sln
+*.vcxproj*
+*.filters
+*.user
+*.aps
+
+# --- Кэш и временные файлы CMake ---
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+*.cmake
+
+# --- Среда разработки (Visual Studio) ---
+.vs/
+.vscode/
+*.suo
+*.user
+*.opendb
+*.db
+*.VC.db
+
+# --- Дополнительно (если нужно) ---
+*.log
+*.tmp
+*.swp
+.DS_Store
