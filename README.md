@@ -45,10 +45,14 @@ Unit 2:
 > - CMake (version 3.10+)  
 > - Compiler C++ (g++, clang, MSVC и др.)
 
-1. Clone repo:
-```bash
+
+# Via CMake
+1. Clone repo and remove .git folder:
+```bash 
 git clone https://github.com/YoungGuitarist/Adam.git
 cd Adam
+rm -rf .git #on Linux
+rd /s /q .git #on Windows
 ```
 
 2. Make `build/` dir and go in it:
@@ -65,5 +69,29 @@ make
 
 4. Run project:
 ```bash
+./Adam.exe
+#or
+./Adam
+```
+
+
+## Via g++
+1. Clone repo:
+```bash
+git clone https://github.com/YoungGuitarist/Adam.git
+cd Adam
+rm -rf .git #on Linux
+rd /s /q .git #on Windows
+```
+
+2. Compile code:
+```bash
+g++ -g main.cpp -o main
+```
+
+3. Run file:
+```bash
+./Adam.exe
+#or
 ./Adam
 ```
