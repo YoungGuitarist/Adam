@@ -57,7 +57,21 @@ struct Poison {
 struct Genome {
   int speed;
   int hp;
+
+  string genomeInString = " ";
 };
+
+//Genome makeGenome(Genome genome = {}) {
+//    string stringGenome;
+//    if (genome.genomeInString == " ") {
+//        string stringGenome = to_string(randFunc(1111, 9999));
+//    }
+//    genome.hp = stoi(stringGenome.substr(0, 2));
+//    genome.speed = stoi(stringGenome.substr(3, 4));
+//
+//    return genome;
+//}
+
 
 class Unit {
 public:
@@ -186,7 +200,7 @@ public:
     }
   }
 
-  Genome initializeGenome() { return {randFunc(0, 99), randFunc(0, 99)}; };
+  Genome initializeGenome() { return {100, 100}; };
 
   void initializeUnits() {
     units.clear();
@@ -295,7 +309,6 @@ public:
       outFile.close();
   }
 };
-
 
 
 int main() {
